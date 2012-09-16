@@ -46,12 +46,12 @@ Ensure that you have internet connectivity, and then run the scripts
 prepare-profoto-dump and profoto-dump
 
 			./prepare-profoto-dump.sh
-			./profoto-dump.sh location_of_your_profoto_data
+			./profoto-dump.sh location_of_your_profoto_cd
 
 or combined in one run (\ means here new line wrapping):
 
 			./prepare-profoto-dump.sh ; \
-				./profoto-dump.sh location_of_your_profoto_data
+				./profoto-dump.sh location_of_your_profoto_cd
 
 B. Manual method
 ----------------
