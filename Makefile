@@ -1,5 +1,7 @@
 # makefile for simplre processing of profoto-dump tasks
 
+PXLIB_VERSION=0.6.5
+
 PXVIEW_VERSION=0.2.5
 
 # generic  targets
@@ -10,13 +12,45 @@ all: pxview.elf
 
 clean: clean_pxview.tar.gz
 
+# --- pxlib ---
+
+# get the source
+pxlib.tar.gz:
+	wget -O pxlib.tar.gz "http://sourceforge.net/projects/pxlib/files/pxlib/$(PXLIB_VERSION)/pxlib-$(PXLIB_VERSION).tar.gz/download"
+
+# clean up downloaded file
+clean_pxlib.tar.gz: clean_pxlib-$(PXLIB_VERSION)
+	rm -f pxlib.tar.gz
+
+
+# unpack sources
+pxlib-$(PXLIB_VERSION): pxlib.tar.gz
+	tar -xzf pxlib.tar.gz
+
+# clean unpacked sources
+clean_pxlib-$(PXLIB_VERSION):
+	rm -rf pxlib-$(PXLIB_VERSION)
+
+# build
+# executable
+pxlib: pxlib-$(PXLIB_VERSION)
+	# build
+		# FIXME "CPPFLAGS="-fno-stack-protector"" is needed to work around
+		# a bug in libpx, that causes "stack smashing detected" error
+	cd "pxlib-$(PXLIB_VERSION)";  CPPFLAGS="-fno-stack-protector" ./configure --prefix="`pwd`/../pxlib"
+	cd "pxlib-$(PXLIB_VERSION)"; make ; make install
+
+
+
+# --- pxview ---
+
 # getting the source code
 pxview.tar.gz:
 	wget -O pxview.tar.gz "http://sourceforge.net/projects/pxlib/files/pxview/$(PXVIEW_VERSION)/pxview_$(PXVIEW_VERSION).orig.tar.gz/download"
 
 # clean downloaded file
 clean_pxview.tar.gz: clean_pxview-$(PXVIEW_VERSION)
-	rm pxview.tar.gz
+	rm -f pxview.tar.gz
 
 
 # unpacking the source
@@ -29,9 +63,11 @@ clean_pxview-$(PXVIEW_VERSION): clean_pxview.elf
 
 
 # executable
-pxview.elf: pxview-$(PXVIEW_VERSION)
+pxview.elf: pxview-$(PXVIEW_VERSION) pxlib
 	# build
-	cd "pxview-$(PXVIEW_VERSION)"; ./configure
+		# FIXME "LIBS=-lm" is needed to work around a configure bug
+		# that causes configure to fail to find libpx
+	cd "pxview-$(PXVIEW_VERSION)"; LIBS=-lm ./configure --with-pxlib="`pwd`/../pxlib"
 	cd "pxview-$(PXVIEW_VERSION)" ; make
 	# copy executable
 	cp pxview-$(PXVIEW_VERSION)/src/pxview pxview.elf
