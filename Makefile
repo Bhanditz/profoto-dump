@@ -38,6 +38,6 @@ pxview.elf: pxview-$(PXVIEW_VERSION)
 
 # clean executable
 clean_pxview.elf:
-	rm pxview.elf
+	rm -f pxview.elf
 
 ## -- end --
