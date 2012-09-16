@@ -30,20 +30,15 @@ Instructions
 	because you will need to comple a program from source code.
 	On Debian or Ubuntu distributions you can install the package
 	called build-essential.
-2. Install pxlib and pxlib-dev. Its homepage is:
 
-			http://pxlib.sourceforge.net/index.php
-			http://sourceforge.net/projects/pxlib/
-
-	Probably your linux distribution already contains this library in
-	packages named pxlib1 and pxlib-dev, or similar.
-
+2. Select one of the two methods below. If you are unsure,
+	then select the first one, marked with A.
 
 A. Automatic method
 -------------------
 
 Ensure that you have internet connectivity, and then run the scripts
-prepare-profoto-dump and profoto-dump
+prepare-profoto-dump and profoto-dump:
 
 			./prepare-profoto-dump.sh
 			./profoto-dump.sh location_of_your_profoto_cd
@@ -56,13 +51,32 @@ or combined in one run (\ means here new line wrapping):
 B. Manual method
 ----------------
 
-1. download pxview source code from
+1. download pxlib source code from
+
+			http://sourceforge.net/projects/pxlib/files/pxlib/
+
+2. decompress the arhive, and run the configure script this way:
+
+			CPPFLAGS=="-fno-stack-protector" ./configure --prefix=/your_preferred_location
+
+	The -fno-stack-protector flag is needed because by default GCC will
+	generate stack checking code, and pxview would print
+	"stack smashing detected" error at each run.
+
+	Run make and install as usual.
+
+3. download pxview source code from
 
 			http://sourceforge.net/projects/pxlib/files
 
-2.
+4. decompress the arhive and run the configure script this way:
 
-- edit the source code: pxview-*/src/main.c, line 2187:
+			LIBS=-lm ./configure --with-pxlib=/where_you_installed_pxlib
+
+	The -lm flag links in the math library; this is required for the
+	configure script, in order to find the manually compiled pxlib.
+
+5. edit the source code: pxview-*/src/main.c, line 2187:
 	change:
 		sprintf(filename, "%s_%d.%s", blobprefix, mod_nr, blobextension);
 	to:
@@ -70,15 +84,18 @@ B. Manual method
 
 	This change is needed in order to prevent pxview from overwriting the image files.
 
-- run pixview:
+6. run pixview:
 	FOTO_DIR - location of .db and .MB files. there are multiple directories:
 		profoto/ profoto/*/
-	pxview FOTO_DIR/profoto.db -b FOTO_DIR/profoto.MB -p img --blobextension=bmp -x -o index.htm
+
+		pxview FOTO_DIR/profoto.db -b FOTO_DIR/profoto.MB -p img --blobextension=bmp -x -o index.htm
 
 	For each directory, run pxview in a separate directory, otherwise the data will be overwritten.
 
-- you will get files with names:
+7. you will get files with names:
 	img_*.bmp
 	Those are the pictures.
+
+	Other data is stored in the generated index.htm files.
 
 --
