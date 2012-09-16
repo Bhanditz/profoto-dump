@@ -19,13 +19,13 @@ if [ -z "$1"  -o  "$2"  ] ;
 fi
 
 # dump the database
-"./work/pxview-$PXVIEW_VERSION/src/pxview \
-	$1/profoto/Profoto/profoto.db \
-	-b $1/profoto/Profoto/profoto.MB \
+./pxview.elf \
+	"$1/Profoto/profoto.db" \
+	-b "$1/Profoto/profoto.MB" \
 	-p img \
 	--blobextension=bmp \
 	-x \
-	-o index.htm"
+	-o index.htm
 
 # TODO
 echo TODO
