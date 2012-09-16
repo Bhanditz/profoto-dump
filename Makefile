@@ -55,19 +55,22 @@ clean_pxview.tar.gz: clean_pxview-$(PXVIEW_VERSION)
 
 
 # unpacking the source
-pxview-$(PXVIEW_VERSION): pxview.tar.gz
+pxview-$(PXVIEW_VERSION)-unarch: pxview.tar.gz
 	tar -xzf pxview.tar.gz
+	echo "1" > "pxview-$(PXVIEW_VERSION)-unarch"
 
 # clean unpacked source
 clean_pxview-$(PXVIEW_VERSION): clean_pxview.elf
 	rm -rf pxview-$(PXVIEW_VERSION)
+	rm -f pxview-$(PXVIEW_VERSION)-unarch
+	rm -f pxview-$(PXVIEW_VERSION)-patched
 
-pxview-$(PXVIEW_VERSION)/patched: pxview-$(PXVIEW_VERSION)
+pxview-$(PXVIEW_VERSION)-patched: pxview-$(PXVIEW_VERSION)-unarch
 	cd "pxview-$(PXVIEW_VERSION)" ; patch -p1 < "../patch-pxview-$(PXVIEW_VERSION).patch"
-	echo "1" > "pxview-$(PXVIEW_VERSION)/patched"
+	echo "1" > "pxview-$(PXVIEW_VERSION)-patched"
 
 # executable
-pxview.elf: pxview-$(PXVIEW_VERSION)/patched pxlib
+pxview.elf: pxview-$(PXVIEW_VERSION)-patched pxlib
 	# build
 		# FIXME "LIBS=-lm" is needed to work around a configure bug
 		# that causes configure to fail to find libpx
