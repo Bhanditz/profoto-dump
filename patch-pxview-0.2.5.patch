@@ -1,0 +1,12 @@
+diff -Naur a/src/main.c b/src/main.c
+--- a/src/main.c	2005-08-09 21:57:20.000000000 +0200
++++ b/src/main.c	2012-09-16 18:38:29.000000000 +0200
+@@ -2182,7 +2182,7 @@
+ 												fputc(blobdata[i], outfp);
+ 											}
+ 										} else {
+-											sprintf(filename, "%s_%d.%s", blobprefix, mod_nr, blobextension);
++											sprintf(filename, "%s_%d_%d.%s", blobprefix, mod_nr, j, blobextension);
+ 											fp = fopen(filename, "w");
+ 											if(fp) {
+ 												fwrite(blobdata, size, 1, fp);

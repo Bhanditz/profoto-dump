@@ -62,9 +62,12 @@ pxview-$(PXVIEW_VERSION): pxview.tar.gz
 clean_pxview-$(PXVIEW_VERSION): clean_pxview.elf
 	rm -rf pxview-$(PXVIEW_VERSION)
 
+pxview-$(PXVIEW_VERSION)/patched: pxview-$(PXVIEW_VERSION)
+	cd "pxview-$(PXVIEW_VERSION)" ; patch -p1 < "../patch-pxview-$(PXVIEW_VERSION).patch"
+	echo "1" > "pxview-$(PXVIEW_VERSION)/patched"
 
 # executable
-pxview.elf: pxview-$(PXVIEW_VERSION) pxlib
+pxview.elf: pxview-$(PXVIEW_VERSION)/patched pxlib
 	# build
 		# FIXME "LIBS=-lm" is needed to work around a configure bug
 		# that causes configure to fail to find libpx
