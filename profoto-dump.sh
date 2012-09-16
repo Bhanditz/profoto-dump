@@ -21,7 +21,8 @@ fi
 PXVIEW="`pwd`/pxview.elf"
 
 
-BASEDIR="`pwd`"
+mkdir -p profoto-dump
+BASEDIR="`pwd`/profoto-dump/"
 
 #
 for dbdir in "$1/Profoto/" "$1"/Profoto/*/ ;
@@ -31,6 +32,7 @@ for dbdir in "$1/Profoto/" "$1"/Profoto/*/ ;
 	# create a directory
 	cd "$BASEDIR"
 	mkdir -p "`basename "$dbdir"`"
+	cd "`basename "$dbdir"`"
 	# dump the database
 	$PXVIEW \
 		"$dbdir/profoto.db" \
@@ -42,8 +44,9 @@ for dbdir in "$1/Profoto/" "$1"/Profoto/*/ ;
 	#
 done
 
+# tidy up
 cd "$BASEDIR"
-mv Profoto profoto-dump
+mv Profoto 0-root
 
 #
 echo DONE
