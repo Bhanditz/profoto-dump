@@ -43,7 +43,7 @@ prepare-profoto-dump and profoto-dump:
 			./prepare-profoto-dump.sh
 			./profoto-dump.sh location_of_your_profoto_cd
 
-or combined in one run (\ means here new line wrapping):
+or combined in one run (\\ means here new line wrapping):
 
 			./prepare-profoto-dump.sh ; \
 				./profoto-dump.sh location_of_your_profoto_cd
@@ -57,7 +57,7 @@ B. Manual method
 
 2. decompress the arhive, and run the configure script this way:
 
-			CPPFLAGS=="-fno-stack-protector" ./configure --prefix=/your_preferred_location
+			CPPFLAGS="-fno-stack-protector" ./configure --prefix=/your_preferred_location
 
 	The -fno-stack-protector flag is needed because by default GCC will
 	generate stack checking code, and pxview would print
@@ -77,23 +77,32 @@ B. Manual method
 	configure script, in order to find the manually compiled pxlib.
 
 5. edit the source code: pxview-*/src/main.c, line 2187:
+
 	change:
+
 		sprintf(filename, "%s_%d.%s", blobprefix, mod_nr, blobextension);
+
 	to:
+
 		sprintf(filename, "%s_%d_%d.%s", blobprefix, mod_nr, j, blobextension);
 
 	This change is needed in order to prevent pxview from overwriting the image files.
 
-6. run pixview:
+6. Run pixview:
+
 	FOTO_DIR - location of .db and .MB files. there are multiple directories:
+
+
 		profoto/ profoto/*/
 
 		pxview FOTO_DIR/profoto.db -b FOTO_DIR/profoto.MB -p img --blobextension=bmp -x -o index.htm
 
 	For each directory, run pxview in a separate directory, otherwise the data will be overwritten.
 
-7. you will get files with names:
-	img_*.bmp
+7. You will get files with names:
+
+		img_*.bmp
+
 	Those are the pictures.
 
 	Other data is stored in the generated index.htm files.
