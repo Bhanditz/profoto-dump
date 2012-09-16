@@ -18,14 +18,33 @@ if [ -z "$1"  -o  "$2"  ] ;
 	exit 1
 fi
 
-# dump the database
-./pxview.elf \
-	"$1/Profoto/profoto.db" \
-	-b "$1/Profoto/profoto.MB" \
-	-p img \
-	--blobextension=bmp \
-	-x \
-	-o index.htm
+PXVIEW="`pwd`/pxview.elf"
 
-# TODO
-echo TODO
+
+BASEDIR="`pwd`"
+
+#
+for dbdir in "$1/Profoto/" "$1"/Profoto/*/ ;
+	do
+	#
+	echo "$dbdir"
+	# create a directory
+	cd "$BASEDIR"
+	mkdir -p "`basename "$dbdir"`"
+	# dump the database
+	$PXVIEW \
+		"$dbdir/profoto.db" \
+		-b "$dbdir/profoto.MB" \
+		-p img \
+		--blobextension=bmp \
+		-x \
+		-o index.htm
+	#
+done
+
+cd "$BASEDIR"
+mv Profoto profoto-dump
+
+#
+echo DONE
+#
