@@ -10,7 +10,7 @@ PXVIEW_VERSION=0.2.5
 
 all: pxview.elf
 
-clean: clean_pxview.tar.gz
+clean: clean_pxview.tar.gz clean_pxlib.tar.gz
 
 # --- pxlib ---
 
@@ -28,7 +28,7 @@ pxlib-$(PXLIB_VERSION): pxlib.tar.gz
 	tar -xzf pxlib.tar.gz
 
 # clean unpacked sources
-clean_pxlib-$(PXLIB_VERSION):
+clean_pxlib-$(PXLIB_VERSION): clean_pxlib
 	rm -rf pxlib-$(PXLIB_VERSION)
 
 # build
@@ -40,7 +40,8 @@ pxlib: pxlib-$(PXLIB_VERSION)
 	cd "pxlib-$(PXLIB_VERSION)";  CPPFLAGS="-fno-stack-protector" ./configure --prefix="`pwd`/../pxlib"
 	cd "pxlib-$(PXLIB_VERSION)"; make ; make install
 
-
+clean_pxlib:
+	rm -rf pxlib
 
 # --- pxview ---
 
